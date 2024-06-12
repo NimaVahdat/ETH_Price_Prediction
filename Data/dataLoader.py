@@ -1,5 +1,7 @@
 import torch
 import pandas as pd
+import numpy as np
+
 
 def create_collate_fn(time_step):
     """
@@ -11,15 +13,17 @@ def create_collate_fn(time_step):
     Returns:
         collate_fn: Collate function for DataLoader.
     """
+
     def collate_fn(batch):
         X, y = [], []
         for i in range(len(batch) - time_step):
-            seq = batch[i:(i+time_step), 0]  # Extract sequence of length 'time_step'
+            seq = batch[i : (i + time_step)]  # Extract sequence of length 'time_step'
             X.append(seq)
-            y.append(batch[i + time_step, 0])  # Target is the value after the sequence
+            y.append(batch[i + time_step])  # Target is the value after the sequence
         return torch.tensor(X), torch.tensor(y)
 
     return collate_fn
+
 
 def get_data_loader(dataset, batch_size, time_step=15, shuffle=False):
     """
@@ -37,8 +41,6 @@ def get_data_loader(dataset, batch_size, time_step=15, shuffle=False):
     # Convert dataset to tensor if it's a numpy array
     if isinstance(dataset, pd.DataFrame):
         dataset = dataset.to_numpy()
-    elif not isinstance(dataset, torch.Tensor):
-        raise TypeError("Unsupported data type. Use numpy.ndarray or torch.Tensor.")
 
     # Create collate function
     collate_fn = create_collate_fn(time_step)
