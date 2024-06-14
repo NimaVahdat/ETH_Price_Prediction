@@ -42,11 +42,17 @@ class ETHPricePredictor:
         """Set up data loaders based on the configuration."""
         data_config = self.config["data_config"]
         batch_size = self.config["batch_size"]
-        data = ETHData(**data_config)
-        self.train_data, self.test_data = data.get_data()
+        time_step = self.config["time_step"]
+        self.data = ETHData(**data_config)
+        self.train_data, self.test_data = self.data.get_data()
 
-        self.train_loader = get_data_loader(self.train_data, batch_size, shuffle=True)
-        self.valid_loader = get_data_loader(self.test_data, batch_size)
+        self.train_loader = get_data_loader(
+            self.train_data, batch_size, time_step, shuffle=True
+        )
+        self.valid_loader = get_data_loader(self.test_data, batch_size, time_step)
+
+    def plot_stock(self, start="2020-01-11", end="2024-06-09"):
+        self.data.plot_stock(start=start, end=end)
 
     def _initialize_weights(self):
         """Initialize model weights if specified in the configuration."""
@@ -89,24 +95,29 @@ class ETHPricePredictor:
         self.model_close.train()
         epoch_losses = [[], [], [], []]
         for X, y in tqdm.tqdm(dataloader, desc=f"Training epoch {epoch+1}"):
-            X, y = X.to(self.device), y.to(self.device)
+            X, y = X.to(self.device).float(), y.to(self.device).float()
             open_X, high_X, low_X, close_X = (
-                X[:, :, 0],
-                X[:, :, 1],
-                X[:, :, 2],
-                X[:, :, 3],
+                X[:, :, 0].unsqueeze(2),
+                X[:, :, 1].unsqueeze(2),
+                X[:, :, 2].unsqueeze(2),
+                X[:, :, 3].unsqueeze(2),
             )
-            open_y, high_y, low_y, close_y = y[:, 0], y[:, 1], y[:, 2], y[:, 3]
+            open_y, high_y, low_y, close_y = (
+                y[:, 0].unsqueeze(1),
+                y[:, 1].unsqueeze(1),
+                y[:, 2].unsqueeze(1),
+                y[:, 3].unsqueeze(1),
+            )
 
-            predictions_open = self.model_open(open_X)
-            predictions_high = self.model_high(high_X)
-            predictions_low = self.model_low(low_X)
-            predictions_close = self.model_close(close_X)
+            predictions_open = self.model_open(open_X).squeeze(1)
+            predictions_high = self.model_high(high_X).squeeze(1)
+            predictions_low = self.model_low(low_X).squeeze(1)
+            predictions_close = self.model_close(close_X).squeeze(1)
 
-            loss_open = self.criterion(predictions_open, open_y)
-            loss_high = self.criterion(predictions_high, high_y)
-            loss_low = self.criterion(predictions_low, low_y)
-            loss_close = self.criterion(predictions_close, close_y)
+            loss_open = self.criterion(predictions_open, open_y.squeeze(1))
+            loss_high = self.criterion(predictions_high, high_y.squeeze(1))
+            loss_low = self.criterion(predictions_low, low_y.squeeze(1))
+            loss_close = self.criterion(predictions_close, close_y.squeeze(1))
 
             self.optimizers["open"].zero_grad()
             self.optimizers["high"].zero_grad()
@@ -141,24 +152,29 @@ class ETHPricePredictor:
         all_close_y, all_close_pred = [], []
         with torch.no_grad():
             for X, y in tqdm.tqdm(dataloader, desc="Evaluating "):
-                X, y = X.to(self.device), y.to(self.device)
+                X, y = X.to(self.device).float(), y.to(self.device).float()
                 open_X, high_X, low_X, close_X = (
-                    X[:, :, 0],
-                    X[:, :, 1],
-                    X[:, :, 2],
-                    X[:, :, 3],
+                    X[:, :, 0].unsqueeze(2),
+                    X[:, :, 1].unsqueeze(2),
+                    X[:, :, 2].unsqueeze(2),
+                    X[:, :, 3].unsqueeze(2),
                 )
-                open_y, high_y, low_y, close_y = y[:, 0], y[:, 1], y[:, 2], y[:, 3]
+                open_y, high_y, low_y, close_y = (
+                    y[:, 0].unsqueeze(1),
+                    y[:, 1].unsqueeze(1),
+                    y[:, 2].unsqueeze(1),
+                    y[:, 3].unsqueeze(1),
+                )
 
-                predictions_open = self.model_open(open_X)
-                predictions_high = self.model_high(high_X)
-                predictions_low = self.model_low(low_X)
-                predictions_close = self.model_close(close_X)
+                predictions_open = self.model_open(open_X).squeeze(1)
+                predictions_high = self.model_high(high_X).squeeze(1)
+                predictions_low = self.model_low(low_X).squeeze(1)
+                predictions_close = self.model_close(close_X).squeeze(1)
 
-                loss_open = self.criterion(predictions_open, open_y)
-                loss_high = self.criterion(predictions_high, high_y)
-                loss_low = self.criterion(predictions_low, low_y)
-                loss_close = self.criterion(predictions_close, close_y)
+                loss_open = self.criterion(predictions_open, open_y.squeeze(1))
+                loss_high = self.criterion(predictions_high, high_y.squeeze(1))
+                loss_low = self.criterion(predictions_low, low_y.squeeze(1))
+                loss_close = self.criterion(predictions_close, close_y.squeeze(1))
 
                 epoch_losses[0].append(loss_open.item())
                 epoch_losses[1].append(loss_high.item())
