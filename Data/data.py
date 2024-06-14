@@ -50,7 +50,9 @@ class ETHData:
             data["Date"],
             data["Open"],
             marker="o",
+            markersize=3,
             linestyle="-",
+            linewidth=0.5,
             color="blue",
             label="Open",
         )
@@ -58,7 +60,9 @@ class ETHData:
             data["Date"],
             data["High"],
             marker="o",
+            markersize=3,
             linestyle="-",
+            linewidth=0.5,
             color="green",
             label="High",
         )
@@ -66,7 +70,9 @@ class ETHData:
             data["Date"],
             data["Low"],
             marker="o",
+            markersize=3,
             linestyle="-",
+            linewidth=0.5,
             color="red",
             label="Low",
         )
@@ -74,7 +80,9 @@ class ETHData:
             data["Date"],
             data["Close"],
             marker="o",
+            markersize=3,
             linestyle="-",
+            linewidth=0.5,
             color="purple",
             label="Close",
         )
