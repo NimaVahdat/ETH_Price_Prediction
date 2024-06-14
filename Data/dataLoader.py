@@ -20,7 +20,7 @@ def create_collate_fn(time_step):
             seq = batch[i : (i + time_step)]  # Extract sequence of length 'time_step'
             X.append(seq)
             y.append(batch[i + time_step])  # Target is the value after the sequence
-        return torch.tensor(X), torch.tensor(y)
+        return torch.tensor(np.array(X)), torch.tensor(np.array(y))
 
     return collate_fn
 
