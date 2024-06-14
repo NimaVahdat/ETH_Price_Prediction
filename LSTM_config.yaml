@@ -1,0 +1,25 @@
+# Configuration file for IMDB Sentiment Analysis
+
+# Model configuration
+model_config:
+  input_dim: 15               
+  hidden_dim: 300                 
+  output_dim: 1                    
+  n_layers: 2                      
+  dropout_rate: 0.4             
+
+# Data configuration
+data_config:
+  test_size: 0.25                  
+  data_dir: ./Data/ETH-USD.csv                   
+
+# Training configuration
+batch_size: 45
+time_step: 15                   
+lr: 0.0005                        
+num_epochs: 7                    
+initialize_weights: True         
+
+# Model to use (LSTM, GRU)
+model: LSTM
+
