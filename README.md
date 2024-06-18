@@ -78,10 +78,10 @@ end: 2024-06-09                 # End date for training
 ## Model Evaluation
 The model performance is evaluated using the following metrics:
 
-Mean Absolute Error (MAE)
-Mean Squared Error (MSE)
-Root Mean Squared Error (RMSE)
-R-squared (R²)
+* Mean Absolute Error (MAE)
+* Mean Squared Error (MSE)
+* Root Mean Squared Error (RMSE)
+* R-squared (R²)
 
 ## Future Work
 This project provides a simple and basic ETH price prediction model. In the future, we plan to enhance the model by incorporating sentiment analysis on news data and tweets to improve its predictive capabilities and better handle the complexities of time series data.
