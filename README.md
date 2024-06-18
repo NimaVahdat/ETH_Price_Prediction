@@ -1,4 +1,4 @@
-# ![Logo](https://github.com/NimaVahdat/ETH_Price_Prediction/blob/main/ETH.jpeg) ETH Price Prediction
+# <img src="[https://github.com/your_username/your_repository/blob/main/assets/logo.png](https://github.com/NimaVahdat/ETH_Price_Prediction/blob/main/ETH.PNG)" alt="Logo" width="20" height="20" style="vertical-align: middle;"> ETH Price Prediction
 
 This repository contains a simple and basic project for predicting Ethereum (ETH) prices using time series analysis and machine learning models. The project includes data preprocessing, feature engineering, and model training using LSTM and GRU neural networks. The models are evaluated using various regression metrics to assess their performance.
 
