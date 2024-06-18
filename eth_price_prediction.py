@@ -50,7 +50,9 @@ class ETHPricePredictor:
         self.start = str(self.config["start"])
         self.end = str(self.config["end"])
         self.data = ETHData(**data_config)
-        self.train_data, self.test_data = self.data.get_data(start=self.start, end=self.end)
+        self.train_data, self.test_data = self.data.get_data(
+            start=self.start, end=self.end
+        )
 
         self.train_loader = get_data_loader(
             self.train_data, batch_size, time_step, shuffle=True
