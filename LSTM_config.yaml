@@ -1,25 +1,26 @@
-# Configuration file for IMDB Sentiment Analysis
+# Configuration file
 
 # Model configuration
 model_config:
-  input_dim: 15               
-  hidden_dim: 300                 
-  output_dim: 1                    
-  n_layers: 2                      
-  dropout_rate: 0.4             
+  input_dim: 16                 # Number of features (time steps)
+  hidden_dim: 10                # Increased hidden dimension for more learning capacity
+  output_dim: 1                 # Predicting one value (e.g., closing price)
+  n_layers: 2                   # Increased number of layers for more abstract representations
+  dropout_rate: 0               # Introduce dropout to prevent overfitting
 
 # Data configuration
 data_config:
-  test_size: 0.25                  
-  data_dir: ./Data/ETH-USD.csv                   
+  test_size: 0.25               # 25% of data for testing
+  data_dir: ./Data/ETH-USD.csv  # Path to the data file
 
 # Training configuration
-batch_size: 45
-time_step: 15                   
-lr: 0.0005                        
-num_epochs: 7                    
-initialize_weights: True         
+batch_size: 32                  # Typical batch size for stable training
+time_step: 16                   # Number of time steps to look back for prediction
+lr: 0.00001                     # Adjusted learning rate for faster convergence
+num_epochs: 1000                # Increased number of epochs for thorough training
+initialize_weights: True        # Initialize weights at the start
 
 # Model to use (LSTM, GRU)
-model: LSTM
-
+model: LSTM                     # Type of model to use
+start: 2023-06-09               # Start date for training
+end: 2024-06-09                 # End date for training
