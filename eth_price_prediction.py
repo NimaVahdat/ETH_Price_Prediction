@@ -12,7 +12,9 @@ from Networks.networks import GRUModel, LSTMModel
 class ETHPricePredictor:
     def __init__(self, config):
         self.config = config
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device(
+            "cpu"
+        )  # "cuda" if torch.cuda.is_available() else "cpu")
         self._setup_data()
         self._setup_model()
         self._initialize_weights()
@@ -28,7 +30,9 @@ class ETHPricePredictor:
         model_cls = (
             LSTMModel
             if model_name == "LSTM"
-            else GRUModel if model_name == "GRU" else None
+            else GRUModel
+            if model_name == "GRU"
+            else None
         )
         if model_cls is None:
             raise ValueError("Model should be either 'LSTM' or 'GRU'!")
@@ -43,16 +47,18 @@ class ETHPricePredictor:
         data_config = self.config["data_config"]
         batch_size = self.config["batch_size"]
         time_step = self.config["time_step"]
+        self.start = str(self.config["start"])
+        self.end = str(self.config["end"])
         self.data = ETHData(**data_config)
-        self.train_data, self.test_data = self.data.get_data()
+        self.train_data, self.test_data = self.data.get_data(start=self.start, end=self.end)
 
         self.train_loader = get_data_loader(
             self.train_data, batch_size, time_step, shuffle=True
         )
         self.valid_loader = get_data_loader(self.test_data, batch_size, time_step)
 
-    def plot_stock(self, start="2020-01-11", end="2024-06-09"):
-        self.data.plot_stock(start=start, end=end)
+    def plot_stock(self):
+        self.data.plot_stock(start=self.start, end=self.end)
 
     def _initialize_weights(self):
         """Initialize model weights if specified in the configuration."""
@@ -137,7 +143,7 @@ class ETHPricePredictor:
             epoch_losses[2].append(loss_low.item())
             epoch_losses[3].append(loss_close.item())
 
-        return torch.mean(torch.tensor(epoch_losses).T, 1)
+        return torch.mean(torch.tensor(epoch_losses), 1)
 
     def evaluate_epoch(self, dataloader):
         """Evaluate the model for one epoch."""
@@ -197,7 +203,7 @@ class ETHPricePredictor:
             "close": self._calculate_metrics(all_close_y, all_close_pred),
         }
 
-        return torch.mean(torch.tensor(epoch_losses).T, 1), metrics
+        return torch.mean(torch.tensor(epoch_losses), 1), metrics
 
     def _calculate_metrics(self, y_true, y_pred):
         """Calculate regression metrics."""
