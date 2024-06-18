@@ -31,11 +31,11 @@ cd ETH_Price_Prediction
 
 ## Usage
 
-1. Prepare your configuration file `config.yml` with the necessary parameters (refer to the [Configuration](#configuration) section). Look at the example LSTM_config.yaml.
+1. Prepare your configuration file `config.yaml` with the necessary parameters (refer to the [Configuration](#configuration) section). Look at the example `LSTM_config.yaml`.
 
 2. Run the main script:
 ```sh
-python main.py --config config.yml
+python main.py --config config.yaml
 ```
 
 ## Configuration
