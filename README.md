@@ -22,7 +22,7 @@ This repository contains a simple and basic project for predicting Ethereum (ETH
 ## Installation
 
 #### Clone the repository:
-    ```sh
+    ```bash
     git clone https://github.com/NimaVahdat/ETH_Price_Prediction.git
     cd ETH_Price_Prediction
     ```
