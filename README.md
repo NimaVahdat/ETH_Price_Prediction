@@ -33,9 +33,9 @@ This repository contains a simple and basic project for predicting Ethereum (ETH
 1. Prepare your configuration file `config.yml` with the necessary parameters (refer to the [Configuration](#configuration) section). Look at the example LSTM_config.yaml.
 
 2. Run the main script:
-    ```sh
-    python main.py --config config.yml
-    ```
+```sh
+python main.py --config config.yml
+```
 
 ## Configuration
 
